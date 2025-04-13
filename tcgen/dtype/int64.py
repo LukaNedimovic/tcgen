@@ -12,6 +12,13 @@ class int64(dtype):
     max = None
 
     def __init__(self, val=None, signed: bool = True, rand: bool = False):
+        """
+        Instantiate a single 64-bit integer.
+        """
+        if super()._is_same_class(self, val):
+            super()._deepcopy(self, val)
+            return
+
         super().__init__(val, signed=signed)
 
         bits = 64

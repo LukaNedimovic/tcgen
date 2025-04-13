@@ -15,6 +15,9 @@ class char(dtype):
         """
         Instantiate a single char.
         """
+        if super()._is_same_class(self, val):
+            super()._deepcopy(self, val)
+            return
 
         # In case of character being provided,
         # convert it to its integer value
