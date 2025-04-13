@@ -15,6 +15,10 @@ class int32(dtype):
         """
         Instantiate a single 32-bit integer.
         """
+        if super()._is_same_class(self, val):
+            super()._deepcopy(self, val)
+            return
+
         super().__init__(val, signed=signed)
 
         bits = 32

@@ -1,3 +1,6 @@
+import copy
+
+
 class dtype:
     """
     Base class for data type implementation.
@@ -106,3 +109,11 @@ class dtype:
     @staticmethod
     def rand(dtype_):
         return dtype_._rand()
+
+    @staticmethod
+    def _is_same_class(orig, val):
+        return isinstance(val, orig.__class__)
+
+    @staticmethod
+    def _deepcopy(orig, val):
+        orig.__dict__ = copy.deepcopy(val.__dict__)

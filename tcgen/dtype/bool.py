@@ -15,6 +15,9 @@ class bool(dtype):
         """
         Instantiate a single 32-bit integer.
         """
+        if super()._is_same_class(self, val):
+            super()._deepcopy(self, val)
+            return
 
         # In case of True or False being provided,
         # convert it to 1 or 0, respectably
