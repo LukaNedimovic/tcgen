@@ -11,7 +11,7 @@ class dtype:
         return f"{self.val}"
 
     def __repr__(self):
-        return f"(val={self.val}, dtype=tcgen.{self.__class__.__name__})"
+        return f"(val={str(self)}, dtype=tcgen.{self.__class__.__name__})"
 
     def __add__(self, other):
         dtype1, dtype2 = self.__class__, other.__class__
