@@ -15,6 +15,14 @@ class char(dtype):
         """
         Instantiate a single char.
         """
+
+        # In case of character being provided,
+        # convert it to its integer value
+        if isinstance(val, str):
+            if len(val) != 1:
+                raise ValueError(f"Cannot wrap more than one character: {val}")
+            val = ord(val)
+
         super().__init__(val, signed=signed)
 
         char.min = 0
