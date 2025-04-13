@@ -49,8 +49,4 @@ class str(dtype):
         if res_dtype is None:
             raise ValueError(f"Cannot perform '+' for dtypes: {dtype1, dtype2}")
 
-        print(self.val)
-        print(other.val)
-        print(self.val + other.val)
-
         return res_dtype(self.val + other.val)
