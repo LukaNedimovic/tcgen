@@ -70,7 +70,7 @@ class dtype:
         return res_dtype(self.val**other.val)
 
     def __eq__(self, other):
-        return self.val == other.val and self.__clas__ == other.__class__
+        return self.val == other.val and self.__class__ == other.__class__
 
     def __lt__(self, other):
         return self.val < other.val
