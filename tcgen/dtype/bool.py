@@ -15,6 +15,12 @@ class bool(dtype):
         """
         Instantiate a single 32-bit integer.
         """
+
+        # In case of True or False being provided,
+        # convert it to 1 or 0, respectably
+        if type(val) is bool:
+            val = int(val)
+
         super().__init__(val, signed=signed)
 
         bool.min = 0
@@ -25,3 +31,6 @@ class bool(dtype):
 
     def _rand(self):
         return random.randint(bool.min, bool.max)
+
+    def __str__(self):
+        return "True" if self.val else "False"
