@@ -1,4 +1,4 @@
-from .dtype import bool, char, dtype, int32, int64, str
+from .dtype import bool, char, dtype, int32, int64, ndarray, str
 from .tcgen import rand, val
 
 __all__ = [
@@ -10,4 +10,5 @@ __all__ = [
     "val",
     "bool",
     "str",
+    "ndarray",
 ]
