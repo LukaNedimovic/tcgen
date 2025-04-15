@@ -191,7 +191,7 @@ class ndarray(dtype):
         # TODO implement reshaping for higher dimensional arrays
         if self._compute_size(new_shape) != self.size:
             raise ValueError(
-                f"cannot reshape array of size {self.size} into shape {new_shape}"
+                f"Cannot reshape array of size {self.size} into shape {new_shape}"
             )
 
         # Create view
@@ -213,3 +213,145 @@ class ndarray(dtype):
 
         new_array = ndarray(transposed, elem_type=self.type, shape=(cols, rows))
         return new_array
+
+    def __add__(self, other):
+        if not isinstance(other, ndarray):
+            raise TypeError(
+                f"Unsupported operand type(s) for +: '{type(self)}' and '{type(other)}'"
+            )
+
+        if self.shape != other.shape:
+            raise ValueError(
+                f"Cannot add arrays of shape {self.shape} and {other.shape} together"
+            )
+
+        # Element-wise addition of values
+        result_vals = [self.type(a + b) for a, b in zip(self.val, other.val)]
+
+        # Create new ndarray with result
+        return ndarray(result_vals, elem_type=self.type, shape=self.shape)
+
+    def __sub__(self, other):
+        if not isinstance(other, ndarray):
+            raise TypeError(
+                f"Unsupported operand type(s) for -: '{type(self)}' and '{type(other)}'"
+            )
+
+        if self.shape != other.shape:
+            raise ValueError(
+                f"Cannot subtract arrays of shape "
+                f"{self.shape} and {other.shape} together"
+            )
+
+        # Element-wise subtraction
+        result_vals = [self.type(a - b) for a, b in zip(self.val, other.val)]
+
+        # Return new ndarray
+        return ndarray(result_vals, elem_type=self.type, shape=self.shape)
+
+    def __mul__(self, other):
+        if not isinstance(other, ndarray):
+            raise TypeError(
+                f"Unsupported operand type(s) for *: '{type(self)}' and '{type(other)}'"
+            )
+
+        if self.shape != other.shape:
+            raise ValueError(
+                f"Cannot multiply arrays of shape "
+                f"{self.shape} and {other.shape} together"
+            )
+
+        # Element-wise multiplication
+        result_vals = [self.type(a * b) for a, b in zip(self.val, other.val)]
+
+        # Return new ndarray with result
+        return ndarray(result_vals, elem_type=self.type, shape=self.shape)
+
+    def dot(self, other):
+        if not isinstance(other, ndarray):
+            raise TypeError("dot product requires both operands to be ndarrays")
+
+        if self.ndim == 1 and other.ndim == 1:
+            # Element-wise multiplication
+            sum = self.type(0)
+            for val in [self.type(a * b) for a, b in zip(self.val, other.val)]:
+                sum = sum + val
+
+            # Return the sum
+            return sum
+
+        m, n = self.shape
+        n2, p = other.shape
+
+        if n != n2:
+            raise ValueError(
+                f"Incompatible shapes for matrix multiplication: "
+                f"{self.shape} and {other.shape}"
+            )
+
+        result_vals = []
+        for i in range(m):
+            for j in range(p):
+                sum_val = self.type(0)
+                for k in range(n):
+                    a = self[i, k]
+                    b = other[k, j]
+                    sum_val += a * b
+                result_vals.append(sum_val)
+
+        return ndarray(result_vals, elem_type=self.type, shape=(m, p))
+
+    def matmul(self, other):
+        if not isinstance(other, ndarray):
+            raise TypeError("matmul requires both operands to be ndarrays")
+
+        # 2D matrix multiplication
+        if self.ndim == 2 and other.ndim == 2:
+            m, n = self.shape
+            n2, p = other.shape
+
+            if n != n2:
+                raise ValueError(
+                    f"Incompatible shapes for matrix multiplication: "
+                    f"{self.shape} and {other.shape}"
+                )
+
+            result_vals = []
+            for i in range(m):
+                for j in range(p):
+                    sum_val = self.type(0)
+                    for k in range(n):
+                        a = self[i, k]
+                        b = other[k, j]
+                        sum_val += a * b
+                    result_vals.append(sum_val)
+
+            return ndarray(result_vals, elem_type=self.type, shape=(m, p))
+
+        # For higher-dimensional arrays
+        elif self.ndim >= 2 and other.ndim >= 2:
+            # Broadcasting rule: handle dimensions other than the last two
+            if self.shape[-1] != other.shape[-2]:
+                raise ValueError(
+                    f"Incompatible shapes for matrix multiplication: "
+                    f"{self.shape} and {other.shape}"
+                )
+
+            # Prepare the result array for broadcasting
+            result_shape = self.shape[:-2] + other.shape[-2:]
+            result_vals = []
+
+            # Iterate over the broadcasted dimensions
+            for indices in self._broadcast_indices(self.shape[:-2], other.shape[:-2]):
+                subarray_self = self[indices + (slice(None), slice(None))]
+                subarray_other = other[indices + (slice(None), slice(None))]
+
+                # Perform matrix multiplication on the last two dimensions
+                sub_result = subarray_self.matmul(subarray_other)
+                result_vals.append(sub_result)
+
+            # Flatten the result and return
+            return ndarray(result_vals, elem_type=self.type, shape=result_shape)
+
+        else:
+            raise ValueError("Invalid shapes for matmul: ndim mismatch")
