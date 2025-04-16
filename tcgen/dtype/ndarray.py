@@ -275,7 +275,7 @@ class ndarray(dtype):
             # Element-wise multiplication
             sum = self.type(0)
             for val in [self.type(a * b) for a, b in zip(self.val, other.val)]:
-                sum = sum + val
+                sum += val
 
             # Return the sum
             return sum
@@ -355,3 +355,35 @@ class ndarray(dtype):
 
         else:
             raise ValueError("Invalid shapes for matmul: ndim mismatch")
+
+    def sum(self):
+        if not self.val:
+            raise ValueError("Cannot compute sum of empty array")
+        sum = self.type(0)
+        for v in self.val:
+            sum = sum + v
+        return sum
+
+    def mean(self):
+        if not self.val:
+            raise ValueError("Cannot compute mean of empty array")
+        total = self.sum()
+        return total / self.type(self.size)
+
+    def max_val(self):
+        if not self.val:
+            raise ValueError("Cannot compute max of empty array")
+        max_val = self.val[0]
+        for v in self.val[1:]:
+            if v > max_val:
+                max_val = v
+        return max_val
+
+    def min_val(self):
+        if not self.val:
+            raise ValueError("Cannot compute min of empty array")
+        min_val = self.val[0]
+        for v in self.val[1:]:
+            if v < min_val:
+                min_val = v
+        return min_val
