@@ -7,7 +7,7 @@ from .int32 import int32
 
 class ndarray(dtype):
     """
-    Class containing the implementation of an array with NumPy-like functionality.
+    Class containing the implementation of an ndarray
     """
 
     min = None
