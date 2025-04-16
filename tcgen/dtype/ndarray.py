@@ -267,6 +267,42 @@ class ndarray(dtype):
         # Return new ndarray with result
         return ndarray(result_vals, elem_type=self.type, shape=self.shape)
 
+    def __truediv__(self, other):
+        if not isinstance(other, ndarray):
+            raise TypeError(
+                f"Unsupported operand type(s) for *: '{type(self)}' and '{type(other)}'"
+            )
+
+        if self.shape != other.shape:
+            raise ValueError(
+                f"Cannot divide arrays of shape "
+                f"{self.shape} and {other.shape} together"
+            )
+
+        # Element-wise division
+        result_vals = [self.type(a / b) for a, b in zip(self.val, other.val)]
+
+        # Return new ndarray with result
+        return ndarray(result_vals, elem_type=self.type, shape=self.shape)
+
+    def __floordiv__(self, other):
+        if not isinstance(other, ndarray):
+            raise TypeError(
+                f"Unsupported operand type(s) for *: '{type(self)}' and '{type(other)}'"
+            )
+
+        if self.shape != other.shape:
+            raise ValueError(
+                f"Cannot divide arrays of shape "
+                f"{self.shape} and {other.shape} together"
+            )
+
+        # Element-wise division
+        result_vals = [self.type(a // b) for a, b in zip(self.val, other.val)]
+
+        # Return new ndarray with result
+        return ndarray(result_vals, elem_type=self.type, shape=self.shape)
+
     def dot(self, other):
         if not isinstance(other, ndarray):
             raise TypeError("dot product requires both operands to be ndarrays")
