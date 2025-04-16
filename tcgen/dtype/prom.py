@@ -2,6 +2,7 @@ from .bool import bool
 from .char import char
 from .int32 import int32
 from .int64 import int64
+from .ndarray import ndarray
 from .str import str
 
 _prom = {
@@ -24,6 +25,8 @@ _prom = {
     (char, str): str,
     # str
     (str, str): str,
+    # ndarray
+    (ndarray, ndarray): ndarray,
 }
 # Add the keys in opposite way
 # Example: (int32, int64) -> (int64, int32)

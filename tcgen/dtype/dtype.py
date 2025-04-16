@@ -44,17 +44,17 @@ class dtype:
         dtype1, dtype2 = self.__class__, other.__class__
         res_dtype = self._promote(dtype1, dtype2)
         if res_dtype is None:
-            raise ValueError(f"Cannot perform '//' for dtypes: {dtype1, dtype2}")
+            raise ValueError(f"Cannot perform '/' for dtypes: {dtype1, dtype2}")
 
-        return res_dtype(self.val // other.val)
+        return res_dtype(self.val / other.val)
 
     def __floordiv__(self, other):
         dtype1, dtype2 = self.__class__, other.__class__
         res_dtype = self._promote(dtype1, dtype2)
         if res_dtype is None:
-            raise ValueError(f"Cannot perform '/' for dtypes: {dtype1, dtype2}")
+            raise ValueError(f"Cannot perform '//' for dtypes: {dtype1, dtype2}")
 
-        return res_dtype(self.val / other.val)
+        return res_dtype(self.val // other.val)
 
     def __mod__(self, other):
         dtype1, dtype2 = self.__class__, other.__class__
